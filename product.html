@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Product — MediWholesale</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #080d14;
+      --bg2: #0d1520;
+      --bg3: #111d2e;
+      --teal: #00d4aa;
+      --teal2: #00a882;
+      --blue: #0ea5e9;
+      --text: #e8f4f8;
+      --muted: #7a9bb5;
+      --border: rgba(0,212,170,0.12);
+      --red: #ef4444;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 68px;
+      background: rgba(8,13,20,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.35rem;
+      color: var(--text);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-logo span { color: var(--teal); }
+
+    .nav-logo-dot {
+      width: 8px; height: 8px;
+      background: var(--teal);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.3); }
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--teal); }
+
+    .nav-actions { display: flex; align-items: center; gap: 12px; }
+
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-ghost:hover { border-color: var(--teal); color: var(--teal); }
+
+    .btn-primary {
+      background: var(--teal);
+      border: none;
+      color: #080d14;
+      padding: 9px 20px;
+      border-radius: 6px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-primary:hover { background: var(--teal2); }
+
+    .cart-count {
+      background: #ef4444;
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 700;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── PAGE WRAP ── */
+    .page-wrap {
+      padding: 90px 5% 60px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* ── BREADCRUMB ── */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+
+    .breadcrumb a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--teal); }
+    .breadcrumb span { color: var(--teal); }
+
+    /* ── PRODUCT LAYOUT ── */
+    .product-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    /* ── LEFT: IMAGE PANEL ── */
+    .product-image-panel {
+      position: sticky;
+      top: 90px;
+    }
+
+    .product-image-box {
+      background: linear-gradient(135deg, rgba(0,212,170,0.06), rgba(14,165,233,0.06));
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      height: 340px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 6rem;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .product-image-box::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(0,212,170,0.08) 0%, transparent 70%);
+    }
+
+    .img-badge {
+      position: absolute;
+      top: 16px; right: 16px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 100px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .badge-in {
+      background: rgba(0,212,170,0.12);
+      border: 1px solid rgba(0,212,170,0.3);
+      color: var(--teal);
+    }
+
+    .badge-out {
+      background: rgba(239,68,68,0.1);
+      border: 1px solid rgba(239,68,68,0.3);
+      color: #f87171;
+    }
+
+    .product-meta-chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.75rem;
+      padding: 5px 12px;
+      border-radius: 100px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .chip strong { color: var(--text); }
+
+    /* ── RIGHT: PRODUCT INFO ── */
+    .product-info {}
+
+    .product-brand-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0,212,170,0.08);
+      border: 1px solid rgba(0,212,170,0.18);
+      color: var(--teal);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 100px;
+      margin-bottom: 14px;
+    }
+
+    .product-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+
+    .product-composition-line {
+      font-size: 0.875rem;
+      color: var(--muted);
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    .product-composition-line strong { color: var(--text); }
+
+    /* ── PRICE DISPLAY ── */
+    .current-price-box {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .price-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .price-big {
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--teal);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .price-note {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .price-gst {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .price-gst span { color: var(--teal); font-weight: 600; }
+
+    /* ── PRICE SLABS TABLE ── */
+    .slabs-section { margin-bottom: 24px; }
+
+    .slabs-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .slabs-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .slabs-table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .slabs-table th {
+      background: var(--bg3);
+      padding: 10px 14px;
+      text-align: left;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      font-weight: 600;
+      font-family: 'Syne', sans-serif;
+    }
+
+    .slabs-table td {
+      padding: 11px 14px;
+      font-size: 0.875rem;
+      border-top: 1px solid var(--border);
+      background: var(--bg2);
+      transition: background 0.15s;
+    }
+
+    .slabs-table tr.active-slab td {
+      background: rgba(0,212,170,0.06);
+    }
+
+    .slabs-table tr.active-slab td:first-child {
+      border-left: 3px solid var(--teal);
+    }
+
+    .slab-price {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      color: var(--teal);
+    }
+
+    .slab-savings {
+      font-size: 0.72rem;
+      color: #4ade80;
+      margin-left: 6px;
+    }
+
+    .slab-badge {
+      background: rgba(0,212,170,0.1);
+      border: 1px solid rgba(0,212,170,0.2);
+      color: var(--teal);
+      font-size: 0.65rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+      margin-left: 6px;
+    }
+
+    /* ── QUANTITY SELECTOR ── */
+    .qty-section { margin-bottom: 24px; }
+
+    .qty-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .qty-wrap {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .qty-control {
+      display: flex;
+      align-items: center;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .qty-btn {
+      background: none;
+      border: none;
+      color: var(--text);
+      width: 44px; height: 44px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .qty-btn:hover { background: rgba(0,212,170,0.08); color: var(--teal); }
+    .qty-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    .qty-input {
+      width: 70px;
+      text-align: center;
+      background: none;
+      border: none;
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 0;
+      height: 44px;
+      outline: none;
+    }
+
+    .qty-info {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .qty-info strong { color: var(--teal); }
+
+    .moq-warning {
+      margin-top: 8px;
+      font-size: 0.78rem;
+      color: #f87171;
+      display: none;
+    }
+
+    /* ── ORDER SUMMARY ── */
+    .order-summary {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 20px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.875rem;
+      margin-bottom: 10px;
+      color: var(--muted);
+    }
+
+    .summary-row:last-child { margin-bottom: 0; }
+
+    .summary-row.total {
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-top: 10px;
+    }
+
+    .summary-row.total span:last-child { color: var(--teal); font-size: 1.1rem; }
+
+    /* ── ACTION BUTTONS ── */
+    .action-buttons {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn-add-cart {
+      flex: 1;
+      background: var(--teal);
+      border: none;
+      color: #080d14;
+      padding: 15px 24px;
+      border-radius: 10px;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-add-cart:hover {
+      background: #00efc0;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,212,170,0.3);
+    }
+
+    .btn-add-cart:disabled {
+      background: var(--bg3);
+      color: var(--muted);
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .btn-quote {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 15px 20px;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-quote:hover { border-color: var(--teal); color: var(--teal); }
+
+    /* ── TOAST NOTIFICATION ── */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: var(--bg2);
+      border: 1px solid var(--teal);
+      border-radius: 10px;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.875rem;
+      z-index: 999;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      max-width: 320px;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast-icon { font-size: 1.2rem; }
+
+    /* ── PRODUCT DETAILS SECTION ── */
+    .details-section {
+      margin-top: 48px;
+      padding-top: 48px;
+      border-top: 1px solid var(--border);
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-top: 28px;
+    }
+
+    .detail-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+    }
+
+    .detail-card h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--teal);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.85rem;
+    }
+
+    .detail-row:last-child { border-bottom: none; }
+    .detail-row .key { color: var(--muted); }
+    .detail-row .val { color: var(--text); font-weight: 500; text-align: right; }
+
+    /* ── RELATED PRODUCTS ── */
+    .related-section {
+      margin-top: 60px;
+      padding-top: 48px;
+      border-top: 1px solid var(--border);
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 28px;
+    }
+
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .related-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      text-decoration: none;
+      color: var(--text);
+      transition: all 0.25s;
+    }
+
+    .related-card:hover {
+      border-color: rgba(0,212,170,0.3);
+      transform: translateY(-3px);
+    }
+
+    .related-img {
+      height: 100px;
+      background: linear-gradient(135deg, rgba(0,212,170,0.06), rgba(14,165,233,0.06));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .related-body { padding: 12px; }
+
+    .related-brand {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--teal);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .related-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .related-price {
+      font-size: 0.82rem;
+      color: var(--teal);
+      font-weight: 600;
+    }
+
+    /* ── LOADING ── */
+    .skeleton {
+      background: linear-gradient(90deg, var(--bg3) 25%, rgba(255,255,255,0.04) 50%, var(--bg3) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 8px;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .page-loading {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* ── NOT FOUND ── */
+    .not-found {
+      text-align: center;
+      padding: 100px 20px;
+    }
+
+    .not-found .icon { font-size: 4rem; margin-bottom: 20px; }
+    .not-found h2 { font-family: 'Syne', sans-serif; font-size: 1.5rem; margin-bottom: 10px; }
+    .not-found p { color: var(--muted); margin-bottom: 24px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .product-layout { grid-template-columns: 1fr; }
+      .product-image-panel { position: static; }
+      .details-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+
+    @media (max-width: 480px) {
+      .page-wrap { padding: 80px 4% 40px; }
+      .action-buttons { flex-direction: column; }
+      .related-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-dot"></div>
+    Medi<span>Wholesale</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="catalog.html">Catalog</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Contact</a></li>
+    <li><a href="#">Track Order</a></li>
+  </ul>
+  <div class="nav-actions">
+    <a href="cart.html" class="btn-ghost">
+      🛒 Cart <span class="cart-count" id="cartCount">0</span>
+    </a>
+    <a href="login.html" class="btn-primary">Login</a>
+  </div>
+</nav>
+
+<!-- ── TOAST ── -->
+<div class="toast" id="toast">
+  <span class="toast-icon">✅</span>
+  <span id="toastMsg">Added to cart!</span>
+</div>
+
+<!-- ── PAGE WRAP ── -->
+<div class="page-wrap">
+  <div id="pageContent">
+    <!-- Loaded dynamically -->
+    <div class="page-loading">
+      <div class="skeleton" style="height:16px;width:200px"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px">
+        <div class="skeleton" style="height:340px;border-radius:20px"></div>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div class="skeleton" style="height:24px;width:120px"></div>
+          <div class="skeleton" style="height:40px;width:80%"></div>
+          <div class="skeleton" style="height:16px;width:60%"></div>
+          <div class="skeleton" style="height:100px;border-radius:14px"></div>
+          <div class="skeleton" style="height:160px;border-radius:10px"></div>
+          <div class="skeleton" style="height:50px;border-radius:10px"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SUPABASE ── -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://doduxjtqphzrthqbfaor.supabase.co';
+  const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRvZHV4anRxcGh6cnRocWJmYW9yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM5MTcyOTAsImV4cCI6MjA4OTQ5MzI5MH0.HRvDWoG4E-Gus2LmaCz0xwd-HkY72eUpN6jOTAG4yio';
+  const { createClient } = supabase;
+  const db = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  const catEmojis = {
+    'Tablets & Capsules': '💊', 'Injectables': '💉',
+    'Surgical Supplies': '🩺', 'OTC Products': '🧴',
+    'Medical Equipment': '🏥', 'Syrups & Liquids': '🧪'
+  };
+
+  let product = null;
+  let slabs = [];
+  let quantity = 0;
+
+  // ── Cart ──
+  function getCart() { return JSON.parse(localStorage.getItem('mw_cart') || '[]'); }
+  function saveCart(cart) { localStorage.setItem('mw_cart', JSON.stringify(cart)); }
+
+  function updateCartCount() {
+    const cart = getCart();
+    const total = cart.reduce((s, i) => s + i.quantity, 0);
+    document.getElementById('cartCount').textContent = cart.length;
+  }
+
+  // ── Toast ──
+  function showToast(msg, icon = '✅') {
+    const toast = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    toast.querySelector('.toast-icon').textContent = icon;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+  }
+
+  // ── Get active slab based on qty ──
+  function getActiveSlab(qty) {
+    if (!slabs.length) return null;
+    let active = slabs[0];
+    for (const slab of slabs) {
+      if (qty >= slab.min_qty && (slab.max_qty === null || qty <= slab.max_qty)) {
+        active = slab;
+        break;
+      }
+    }
+    return active;
+  }
+
+  // ── Update price display ──
+  function updatePriceDisplay() {
+    const qty = parseInt(document.getElementById('qtyInput')?.value) || 0;
+    const slab = getActiveSlab(qty);
+    if (!slab || !product) return;
+
+    const pricePerUnit = slab.price_per_unit;
+    const subtotal = pricePerUnit * qty;
+    const gstAmount = subtotal * (product.gst_percent / 100);
+    const total = subtotal + gstAmount;
+
+    document.getElementById('currentPrice').textContent = `₹${pricePerUnit.toFixed(2)}`;
+    document.getElementById('summaryQty').textContent = qty;
+    document.getElementById('summaryUnit').textContent = `₹${pricePerUnit.toFixed(2)}`;
+    document.getElementById('summarySubtotal').textContent = `₹${subtotal.toFixed(2)}`;
+    document.getElementById('summaryGst').textContent = `₹${gstAmount.toFixed(2)} (${product.gst_percent}%)`;
+    document.getElementById('summaryTotal').textContent = `₹${total.toFixed(2)}`;
+    document.getElementById('priceGstIncl').textContent = `₹${(pricePerUnit * (1 + product.gst_percent / 100)).toFixed(2)}`;
+
+    // Highlight active slab row
+    document.querySelectorAll('.slab-row').forEach(row => {
+      row.classList.remove('active-slab');
+      if (row.dataset.slabId === String(slab.id)) row.classList.add('active-slab');
+    });
+
+    // MOQ warning
+    const warn = document.getElementById('moqWarning');
+    const addBtn = document.getElementById('addCartBtn');
+    if (qty < product.moq) {
+      warn.style.display = 'block';
+      warn.textContent = `⚠️ Minimum order quantity is ${product.moq} units`;
+      addBtn.disabled = true;
+    } else {
+      warn.style.display = 'none';
+      addBtn.disabled = false;
+    }
+  }
+
+  // ── Qty controls ──
+  function changeQty(delta) {
+    const input = document.getElementById('qtyInput');
+    let val = parseInt(input.value) || 0;
+    val = Math.max(0, val + delta);
+    input.value = val;
+    updatePriceDisplay();
+  }
+
+  function onQtyInput() { updatePriceDisplay(); }
+
+  // ── Add to Cart ──
+  function addToCart() {
+    const qty = parseInt(document.getElementById('qtyInput').value) || 0;
+    if (qty < product.moq) {
+      showToast(`Minimum order is ${product.moq} units`, '⚠️');
+      return;
+    }
+
+    const slab = getActiveSlab(qty);
+    const cart = getCart();
+    const existing = cart.findIndex(i => i.id === product.id);
+
+    if (existing >= 0) {
+      cart[existing].quantity += qty;
+      cart[existing].price_per_unit = slab.price_per_unit;
+    } else {
+      cart.push({
+        id: product.id,
+        name: product.name,
+        brand: product.brand,
+        quantity: qty,
+        price_per_unit: slab.price_per_unit,
+        gst_percent: product.gst_percent,
+        moq: product.moq,
+        category: product.categories?.name || ''
+      });
+    }
+
+    saveCart(cart);
+    updateCartCount();
+    showToast(`${product.name} added to cart!`, '✅');
+  }
+
+  // ── Request Quote ──
+  function requestQuote() {
+    const qty = parseInt(document.getElementById('qtyInput').value) || product.moq;
+    const subject = encodeURIComponent(`Quote Request: ${product.name}`);
+    const body = encodeURIComponent(`Hi,\n\nI'd like to request a quote for:\n\nProduct: ${product.name}\nBrand: ${product.brand}\nQuantity: ${qty} units\n\nPlease share pricing and availability.\n\nThank you.`);
+    window.location.href = `mailto:wholesale@mediwholesale.in?subject=${subject}&body=${body}`;
+  }
+
+  // ── Render page ──
+  function renderPage() {
+    const catName = product.categories?.name || '';
+    const icon = catEmojis[catName] || '💊';
+    const basePrice = slabs.length > 0 ? slabs[0].price_per_unit : 0;
+    const topSlab = slabs[slabs.length - 1];
+
+    document.title = `${product.name} — MediWholesale`;
+
+    const slabsHTML = slabs.map((s, i) => {
+      const savings = i > 0 ? (((slabs[0].price_per_unit - s.price_per_unit) / slabs[0].price_per_unit) * 100).toFixed(0) : null;
+      return `
+        <tr class="slab-row" data-slab-id="${s.id}">
+          <td>${s.min_qty}${s.max_qty ? ' – ' + s.max_qty : '+'} units</td>
+          <td>
+            <span class="slab-price">₹${s.price_per_unit.toFixed(2)}</span>
+            ${savings ? `<span class="slab-savings">↓${savings}%</span>` : ''}
+            ${i === slabs.length - 1 && slabs.length > 1 ? '<span class="slab-badge">BEST</span>' : ''}
+          </td>
+          <td style="color:var(--muted);font-size:0.8rem">₹${(s.price_per_unit * (1 + product.gst_percent/100)).toFixed(2)} incl. GST</td>
+        </tr>
+      `;
+    }).join('');
+
+    document.getElementById('pageContent').innerHTML = `
+      <div class="breadcrumb">
+        <a href="index.html">Home</a> ›
+        <a href="catalog.html">Catalog</a> ›
+        <a href="catalog.html?category=${product.category_id}">${catName}</a> ›
+        <span style="color:var(--text)">${product.name}</span>
+      </div>
+
+      <div class="product-layout">
+
+        <!-- LEFT -->
+        <div class="product-image-panel">
+          <div class="product-image-box">
+            ${icon}
+            <div class="img-badge ${product.in_stock ? 'badge-in' : 'badge-out'}">
+              ${product.in_stock ? '● In Stock' : '● Out of Stock'}
+            </div>
+          </div>
+          <div class="product-meta-chips">
+            <div class="chip">🏷️ MOQ: <strong>${product.moq} units</strong></div>
+            <div class="chip">🧾 GST: <strong>${product.gst_percent}%</strong></div>
+            ${product.strength ? `<div class="chip">💊 <strong>${product.strength}</strong></div>` : ''}
+          </div>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="product-info">
+          <div class="product-brand-tag">${product.brand || 'Generic'}</div>
+          <h1 class="product-title">${product.name}</h1>
+          <p class="product-composition-line">
+            Composition: <strong>${product.composition || 'N/A'}</strong>
+            ${product.strength ? `&nbsp;·&nbsp; Strength: <strong>${product.strength}</strong>` : ''}
+            &nbsp;·&nbsp; Category: <strong>${catName}</strong>
+          </p>
+
+          <!-- Current Price -->
+          <div class="current-price-box">
+            <div class="price-label">Starting Price (excl. GST)</div>
+            <div class="price-big" id="currentPrice">₹${basePrice.toFixed(2)}</div>
+            <div class="price-note">per unit · Price updates with quantity</div>
+            <div class="price-gst">
+              <span>Incl. GST (${product.gst_percent}%)</span>
+              <span id="priceGstIncl">₹${(basePrice * (1 + product.gst_percent/100)).toFixed(2)}/unit</span>
+            </div>
+          </div>
+
+          <!-- Price Slabs -->
+          <div class="slabs-section">
+            <div class="slabs-title">Bulk Pricing Slabs</div>
+            <table class="slabs-table">
+              <thead>
+                <tr>
+                  <th>Quantity</th>
+                  <th>Price/Unit</th>
+                  <th>Incl. GST</th>
+                </tr>
+              </thead>
+              <tbody id="slabsBody">${slabsHTML}</tbody>
+            </table>
+          </div>
+
+          <!-- Quantity Selector -->
+          <div class="qty-section">
+            <div class="qty-label">Select Quantity</div>
+            <div class="qty-wrap">
+              <div class="qty-control">
+                <button class="qty-btn" onclick="changeQty(-${product.moq})">−</button>
+                <input type="number" class="qty-input" id="qtyInput"
+                  value="${product.moq}" min="${product.moq}" step="${product.moq}"
+                  oninput="onQtyInput()"/>
+                <button class="qty-btn" onclick="changeQty(${product.moq})">+</button>
+              </div>
+              <div class="qty-info">
+                Min. order: <strong>${product.moq} units</strong><br/>
+                Step: <strong>${product.moq} units</strong>
+              </div>
+            </div>
+            <div class="moq-warning" id="moqWarning"></div>
+          </div>
+
+          <!-- Order Summary -->
+          <div class="order-summary">
+            <div class="summary-row">
+              <span>Quantity</span>
+              <span id="summaryQty">${product.moq}</span>
+            </div>
+            <div class="summary-row">
+              <span>Price/Unit</span>
+              <span id="summaryUnit">₹${basePrice.toFixed(2)}</span>
+            </div>
+            <div class="summary-row">
+              <span>Subtotal</span>
+              <span id="summarySubtotal">₹${(basePrice * product.moq).toFixed(2)}</span>
+            </div>
+            <div class="summary-row">
+              <span>GST</span>
+              <span id="summaryGst">₹${(basePrice * product.moq * product.gst_percent/100).toFixed(2)} (${product.gst_percent}%)</span>
+            </div>
+            <div class="summary-row total">
+              <span>Total (incl. GST)</span>
+              <span id="summaryTotal">₹${(basePrice * product.moq * (1 + product.gst_percent/100)).toFixed(2)}</span>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="action-buttons">
+            <button class="btn-add-cart" id="addCartBtn" onclick="addToCart()" ${!product.in_stock ? 'disabled' : ''}>
+              🛒 ${product.in_stock ? 'Add to Cart' : 'Out of Stock'}
+            </button>
+            <button class="btn-quote" onclick="requestQuote()">📋 Request Quote</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Details -->
+      <div class="details-section">
+        <div class="section-label">Product Details</div>
+        <div class="section-title" style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:0">Specifications & Info</div>
+        <div class="details-grid">
+          <div class="detail-card">
+            <h3>Product Info</h3>
+            <div class="detail-row"><span class="key">Product Name</span><span class="val">${product.name}</span></div>
+            <div class="detail-row"><span class="key">Brand</span><span class="val">${product.brand || 'Generic'}</span></div>
+            <div class="detail-row"><span class="key">Composition</span><span class="val">${product.composition || 'N/A'}</span></div>
+            <div class="detail-row"><span class="key">Strength</span><span class="val">${product.strength || 'N/A'}</span></div>
+            <div class="detail-row"><span class="key">Category</span><span class="val">${catName}</span></div>
+          </div>
+          <div class="detail-card">
+            <h3>Order Info</h3>
+            <div class="detail-row"><span class="key">Minimum Order Qty</span><span class="val">${product.moq} units</span></div>
+            <div class="detail-row"><span class="key">GST Rate</span><span class="val">${product.gst_percent}%</span></div>
+            <div class="detail-row"><span class="key">Starting Price</span><span class="val">₹${basePrice.toFixed(2)}/unit</span></div>
+            <div class="detail-row"><span class="key">Best Price</span><span class="val">₹${topSlab ? topSlab.price_per_unit.toFixed(2) : basePrice.toFixed(2)}/unit</span></div>
+            <div class="detail-row"><span class="key">Stock Status</span><span class="val" style="color:${product.in_stock ? 'var(--teal)' : '#f87171'}">${product.in_stock ? 'Available' : 'Out of Stock'}</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Related Products -->
+      <div class="related-section" id="relatedSection">
+        <div class="section-label">More from this category</div>
+        <div class="section-title">Related Products</div>
+        <div class="related-grid" id="relatedGrid">
+          <div class="skeleton" style="height:180px;border-radius:12px"></div>
+          <div class="skeleton" style="height:180px;border-radius:12px"></div>
+          <div class="skeleton" style="height:180px;border-radius:12px"></div>
+          <div class="skeleton" style="height:180px;border-radius:12px"></div>
+        </div>
+      </div>
+    `;
+
+    // Init price display
+    updatePriceDisplay();
+  }
+
+  // ── Load related products ──
+  async function loadRelated() {
+    const { data } = await db
+      .from('products')
+      .select('*, categories(name)')
+      .eq('category_id', product.category_id)
+      .neq('id', product.id)
+      .limit(4);
+
+    const grid = document.getElementById('relatedGrid');
+    if (!data || data.length === 0) {
+      document.getElementById('relatedSection').style.display = 'none';
+      return;
+    }
+
+    // Get starting prices
+    const ids = data.map(p => p.id);
+    const { data: relSlabs } = await db.from('price_slabs').select('*').in('product_id', ids).order('min_qty');
+
+    const slabMap = {};
+    (relSlabs || []).forEach(s => {
+      if (!slabMap[s.product_id]) slabMap[s.product_id] = s.price_per_unit;
+    });
+
+    grid.innerHTML = data.map(p => `
+      <a href="product.html?id=${p.id}" class="related-card">
+        <div class="related-img">${catEmojis[p.categories?.name] || '💊'}</div>
+        <div class="related-body">
+          <div class="related-brand">${p.brand || 'Generic'}</div>
+          <div class="related-name">${p.name}</div>
+          <div class="related-price">${slabMap[p.id] ? '₹' + slabMap[p.id].toFixed(2) + '/unit' : 'Get Quote'}</div>
+        </div>
+      </a>
+    `).join('');
+  }
+
+  // ── Init ──
+  async function init() {
+    updateCartCount();
+
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+
+    if (!id) {
+      document.getElementById('pageContent').innerHTML = `
+        <div class="not-found">
+          <div class="icon">🔍</div>
+          <h2>Product Not Found</h2>
+          <p>The product you're looking for doesn't exist.</p>
+          <a href="catalog.html" class="btn-primary" style="display:inline-block;padding:12px 24px;border-radius:8px;text-decoration:none">Browse Catalog</a>
+        </div>`;
+      return;
+    }
+
+    const { data: p, error } = await db
+      .from('products')
+      .select('*, categories(name)')
+      .eq('id', id)
+      .single();
+
+    if (error || !p) {
+      document.getElementById('pageContent').innerHTML = `
+        <div class="not-found">
+          <div class="icon">❌</div>
+          <h2>Product Not Found</h2>
+          <p>This product may have been removed or is unavailable.</p>
+          <a href="catalog.html" class="btn-primary" style="display:inline-block;padding:12px 24px;border-radius:8px;text-decoration:none">Browse Catalog</a>
+        </div>`;
+      return;
+    }
+
+    product = p;
+
+    const { data: s } = await db
+      .from('price_slabs')
+      .select('*')
+      .eq('product_id', id)
+      .order('min_qty', { ascending: true });
+
+    slabs = s || [];
+    renderPage();
+    loadRelated();
+  }
+
+  init();
+</script>
+
+</body>
+</html>
