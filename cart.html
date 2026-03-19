@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cart — MediWholesale</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #080d14;
+      --bg2: #0d1520;
+      --bg3: #111d2e;
+      --teal: #00d4aa;
+      --teal2: #00a882;
+      --text: #e8f4f8;
+      --muted: #7a9bb5;
+      --border: rgba(0,212,170,0.12);
+      --red: #ef4444;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 68px;
+      background: rgba(8,13,20,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.35rem;
+      color: var(--text);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-logo span { color: var(--teal); }
+
+    .nav-logo-dot {
+      width: 8px; height: 8px;
+      background: var(--teal);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--teal); }
+
+    .nav-actions { display: flex; align-items: center; gap: 12px; }
+
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-ghost:hover { border-color: var(--teal); color: var(--teal); }
+
+    .btn-primary {
+      background: var(--teal);
+      border: none;
+      color: #080d14;
+      padding: 9px 20px;
+      border-radius: 6px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-primary:hover { background: var(--teal2); }
+
+    /* ── PAGE ── */
+    .page-wrap {
+      padding: 100px 5% 60px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+
+    .breadcrumb a { color: var(--muted); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--teal); }
+    .breadcrumb span { color: var(--text); }
+
+    .page-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .page-sub {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 36px;
+    }
+
+    /* ── STEPS ── */
+    .steps {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 40px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .step {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      border-right: 1px solid var(--border);
+      transition: all 0.2s;
+    }
+
+    .step:last-child { border-right: none; }
+
+    .step.active {
+      background: rgba(0,212,170,0.07);
+      color: var(--teal);
+    }
+
+    .step.done { color: var(--teal); }
+
+    .step-num {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .step.active .step-num {
+      background: var(--teal);
+      color: #080d14;
+      border-color: var(--teal);
+    }
+
+    .step.done .step-num {
+      background: rgba(0,212,170,0.15);
+      border-color: var(--teal);
+      color: var(--teal);
+    }
+
+    /* ── LAYOUT ── */
+    .cart-layout {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 28px;
+      align-items: start;
+    }
+
+    /* ── CART ITEMS ── */
+    .cart-items-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .cart-item {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 60px 1fr auto;
+      gap: 16px;
+      align-items: center;
+      animation: fadeUp 0.3s ease both;
+      transition: border-color 0.2s;
+    }
+
+    .cart-item:hover { border-color: rgba(0,212,170,0.2); }
+
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(12px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    .item-icon {
+      width: 60px; height: 60px;
+      background: linear-gradient(135deg,rgba(0,212,170,0.08),rgba(14,165,233,0.08));
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      flex-shrink: 0;
+    }
+
+    .item-details {}
+
+    .item-brand {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--teal);
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    .item-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .item-meta {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .item-controls {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+    }
+
+    .item-price {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--teal);
+      text-align: right;
+    }
+
+    .item-price-sub {
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+    }
+
+    .item-qty-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .qty-ctrl {
+      display: flex;
+      align-items: center;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      overflow: hidden;
+    }
+
+    .qty-btn {
+      background: none;
+      border: none;
+      color: var(--text);
+      width: 32px; height: 32px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .qty-btn:hover { background:rgba(0,212,170,0.08); color:var(--teal); }
+
+    .qty-num {
+      width: 50px;
+      text-align: center;
+      background: none;
+      border: none;
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 0;
+      height: 32px;
+      outline: none;
+    }
+
+    .btn-remove {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 4px;
+      transition: color 0.2s;
+      line-height: 1;
+    }
+
+    .btn-remove:hover { color: var(--red); }
+
+    /* ── EMPTY CART ── */
+    .empty-cart {
+      text-align: center;
+      padding: 80px 20px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+    }
+
+    .empty-cart .icon { font-size: 3.5rem; margin-bottom: 16px; }
+    .empty-cart h3 { font-family: 'Syne', sans-serif; font-size: 1.2rem; margin-bottom: 8px; }
+    .empty-cart p { color: var(--muted); font-size: 0.875rem; margin-bottom: 24px; }
+
+    .btn-shop {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--teal);
+      color: #080d14;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-shop:hover { background: var(--teal2); transform: translateY(-1px); }
+
+    /* ── ORDER SUMMARY CARD ── */
+    .summary-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      position: sticky;
+      top: 90px;
+    }
+
+    .summary-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.875rem;
+      margin-bottom: 12px;
+      color: var(--muted);
+    }
+
+    .summary-row span:last-child { color: var(--text); }
+
+    .summary-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 14px 0;
+    }
+
+    .summary-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+    }
+
+    .summary-total span:last-child { color: var(--teal); }
+
+    .gst-note {
+      font-size: 0.75rem;
+      color: var(--muted);
+      background: rgba(0,212,170,0.05);
+      border: 1px solid rgba(0,212,170,0.1);
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .btn-checkout {
+      width: 100%;
+      background: var(--teal);
+      border: none;
+      color: #080d14;
+      padding: 15px;
+      border-radius: 10px;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 10px;
+    }
+
+    .btn-checkout:hover {
+      background: #00efc0;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 25px rgba(0,212,170,0.3);
+    }
+
+    .btn-checkout:disabled {
+      background: var(--bg3);
+      color: var(--muted);
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .btn-continue {
+      width: 100%;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 12px;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: block;
+      text-align: center;
+    }
+
+    .btn-continue:hover { border-color: var(--teal); color: var(--teal); }
+
+    /* ── CHECKOUT FORM ── */
+    .checkout-section {
+      display: none;
+      margin-top: 32px;
+    }
+
+    .checkout-section.visible { display: block; }
+
+    .form-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+
+    .form-card-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-grid.full { grid-template-columns: 1fr; }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group.span-2 { grid-column: span 2; }
+
+    .form-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .form-label .req { color: var(--red); }
+
+    .form-input, .form-select, .form-textarea {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 14px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.875rem;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--teal);
+    }
+
+    .form-input::placeholder, .form-textarea::placeholder {
+      color: var(--muted);
+    }
+
+    .form-textarea { resize: vertical; min-height: 80px; }
+
+    .form-select option { background: var(--bg2); }
+
+    .form-hint {
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    /* Payment Methods */
+    .payment-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .payment-option {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .payment-option:hover { border-color: rgba(0,212,170,0.25); }
+    .payment-option.selected {
+      border-color: var(--teal);
+      background: rgba(0,212,170,0.05);
+    }
+
+    .payment-option input[type="radio"] {
+      accent-color: var(--teal);
+      width: 16px; height: 16px;
+    }
+
+    .payment-option label {
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+
+    .payment-option .pay-icon { font-size: 1.2rem; }
+
+    /* Submit button */
+    .btn-place-order {
+      width: 100%;
+      background: var(--teal);
+      border: none;
+      color: #080d14;
+      padding: 16px;
+      border-radius: 10px;
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-place-order:hover {
+      background: #00efc0;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0,212,170,0.3);
+    }
+
+    .btn-place-order:disabled {
+      background: var(--bg3);
+      color: var(--muted);
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* ── SUCCESS STATE ── */
+    .success-state {
+      display: none;
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .success-state.visible { display: block; }
+
+    .success-icon {
+      width: 80px; height: 80px;
+      background: rgba(0,212,170,0.1);
+      border: 2px solid var(--teal);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      margin: 0 auto 24px;
+      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    }
+
+    @keyframes popIn {
+      from { opacity:0; transform:scale(0.5); }
+      to   { opacity:1; transform:scale(1); }
+    }
+
+    .success-state h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .success-state p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 32px;
+      line-height: 1.7;
+    }
+
+    .order-id-box {
+      display: inline-block;
+      background: var(--bg2);
+      border: 1px solid var(--teal);
+      border-radius: 10px;
+      padding: 14px 28px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      color: var(--teal);
+      font-size: 1.1rem;
+      margin-bottom: 28px;
+      letter-spacing: 0.05em;
+    }
+
+    .success-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 28px; right: 28px;
+      background: var(--bg2);
+      border: 1px solid var(--teal);
+      border-radius: 10px;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.875rem;
+      z-index: 999;
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    /* ── LOADING OVERLAY ── */
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(8,13,20,0.8);
+      backdrop-filter: blur(4px);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .loading-overlay.visible { display: flex; }
+
+    .spinner {
+      width: 48px; height: 48px;
+      border: 3px solid var(--border);
+      border-top-color: var(--teal);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-text {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.9rem;
+      color: var(--teal);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .cart-layout { grid-template-columns: 1fr; }
+      .summary-card { position: static; }
+      .nav-links { display: none; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-group.span-2 { grid-column: span 1; }
+    }
+
+    @media (max-width: 600px) {
+      .cart-item { grid-template-columns: 50px 1fr; }
+      .item-controls { grid-column: 1 / -1; flex-direction: row; justify-content: space-between; align-items: center; }
+      .steps { overflow-x: auto; }
+      .step { min-width: 100px; font-size: 0.75rem; }
+      .payment-options { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-dot"></div>
+    Medi<span>Wholesale</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="catalog.html">Catalog</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+  <div class="nav-actions">
+    <a href="login.html" class="btn-ghost">Login</a>
+  </div>
+</nav>
+
+<!-- ── LOADING OVERLAY ── -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <div class="loading-text">Placing your order...</div>
+</div>
+
+<!-- ── TOAST ── -->
+<div class="toast" id="toast">
+  <span id="toastIcon">✅</span>
+  <span id="toastMsg">Done!</span>
+</div>
+
+<!-- ── PAGE ── -->
+<div class="page-wrap">
+  <div class="breadcrumb">
+    <a href="index.html">Home</a> ›
+    <a href="catalog.html">Catalog</a> ›
+    <span>Cart & Checkout</span>
+  </div>
+
+  <h1 class="page-title">Your Cart</h1>
+  <p class="page-sub" id="pageSubtitle">Review your bulk order before checkout</p>
+
+  <!-- Steps -->
+  <div class="steps">
+    <div class="step active" id="step1">
+      <div class="step-num">1</div>
+      <span>Review Cart</span>
+    </div>
+    <div class="step" id="step2">
+      <div class="step-num">2</div>
+      <span>Business Details</span>
+    </div>
+    <div class="step" id="step3">
+      <div class="step-num">3</div>
+      <span>Confirm Order</span>
+    </div>
+  </div>
+
+  <!-- CART VIEW -->
+  <div id="cartView">
+    <div class="cart-layout">
+      <!-- Left: Items -->
+      <div class="cart-items-wrap" id="cartItemsWrap">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- Right: Summary -->
+      <div class="summary-card" id="summaryCard">
+        <div class="summary-title">Order Summary</div>
+        <div class="summary-row">
+          <span>Items</span>
+          <span id="summaryItems">0</span>
+        </div>
+        <div class="summary-row">
+          <span>Total Qty</span>
+          <span id="summaryQty">0 units</span>
+        </div>
+        <div class="summary-divider"></div>
+        <div class="summary-row">
+          <span>Subtotal (excl. GST)</span>
+          <span id="summarySubtotal">₹0.00</span>
+        </div>
+        <div class="summary-row">
+          <span>GST</span>
+          <span id="summaryGst">₹0.00</span>
+        </div>
+        <div class="summary-divider"></div>
+        <div class="summary-total">
+          <span>Total</span>
+          <span id="summaryTotal">₹0.00</span>
+        </div>
+        <div class="gst-note">
+          🧾 GST invoice will be generated after order confirmation. Ensure your GST number is correct in the next step.
+        </div>
+        <button class="btn-checkout" id="proceedBtn" onclick="goToCheckout()">
+          Proceed to Checkout →
+        </button>
+        <a href="catalog.html" class="btn-continue">← Continue Shopping</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHECKOUT FORM -->
+  <div id="checkoutView" style="display:none">
+    <div class="cart-layout">
+
+      <!-- Left: Forms -->
+      <div>
+        <!-- Business Info -->
+        <div class="form-card">
+          <div class="form-card-title">🏢 Business Details</div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Firm / Business Name <span class="req">*</span></label>
+              <input type="text" class="form-input" id="firmName" placeholder="e.g. Sharma Medical Stores"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Contact Person <span class="req">*</span></label>
+              <input type="text" class="form-input" id="contactName" placeholder="Full name"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone Number <span class="req">*</span></label>
+              <input type="tel" class="form-input" id="phone" placeholder="+91 XXXXX XXXXX" maxlength="13"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email Address <span class="req">*</span></label>
+              <input type="email" class="form-input" id="email" placeholder="business@email.com"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">GST Number</label>
+              <input type="text" class="form-input" id="gstNumber" placeholder="e.g. 07AAAAA0000A1Z5" maxlength="15" style="text-transform:uppercase"/>
+              <span class="form-hint">Leave blank if not registered</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Drug License Number <span class="req">*</span></label>
+              <input type="text" class="form-input" id="drugLicense" placeholder="e.g. DL/2020/UP/12345"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Delivery Address -->
+        <div class="form-card">
+          <div class="form-card-title">📍 Delivery Address</div>
+          <div class="form-grid">
+            <div class="form-group span-2">
+              <label class="form-label">Street Address <span class="req">*</span></label>
+              <input type="text" class="form-input" id="street" placeholder="Shop no., building, street name"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">City <span class="req">*</span></label>
+              <input type="text" class="form-input" id="city" placeholder="City"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">State <span class="req">*</span></label>
+              <select class="form-select" id="state">
+                <option value="">Select State</option>
+                <option>Uttar Pradesh</option><option>Delhi</option>
+                <option>Maharashtra</option><option>Gujarat</option>
+                <option>Rajasthan</option><option>Madhya Pradesh</option>
+                <option>Karnataka</option><option>Tamil Nadu</option>
+                <option>West Bengal</option><option>Bihar</option>
+                <option>Haryana</option><option>Punjab</option>
+                <option>Telangana</option><option>Andhra Pradesh</option>
+                <option>Kerala</option><option>Odisha</option>
+                <option>Assam</option><option>Jharkhand</option>
+                <option>Chhattisgarh</option><option>Uttarakhand</option>
+                <option>Himachal Pradesh</option><option>Goa</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">PIN Code <span class="req">*</span></label>
+              <input type="text" class="form-input" id="pincode" placeholder="6-digit PIN" maxlength="6"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Landmark</label>
+              <input type="text" class="form-input" id="landmark" placeholder="Optional"/>
+            </div>
+            <div class="form-group span-2">
+              <label class="form-label">Special Instructions</label>
+              <textarea class="form-textarea" id="instructions" placeholder="Any special delivery instructions..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="form-card">
+          <div class="form-card-title">💳 Payment Method</div>
+          <div class="payment-options" id="paymentOptions">
+            <div class="payment-option selected" onclick="selectPayment(this, 'cod')">
+              <input type="radio" name="payment" value="cod" checked>
+              <span class="pay-icon">💵</span>
+              <label>Cash on Delivery</label>
+            </div>
+            <div class="payment-option" onclick="selectPayment(this, 'bank')">
+              <input type="radio" name="payment" value="bank">
+              <span class="pay-icon">🏦</span>
+              <label>Bank Transfer</label>
+            </div>
+            <div class="payment-option" onclick="selectPayment(this, 'upi')">
+              <input type="radio" name="payment" value="upi">
+              <span class="pay-icon">📱</span>
+              <label>UPI / NEFT</label>
+            </div>
+            <div class="payment-option" onclick="selectPayment(this, 'credit')">
+              <input type="radio" name="payment" value="credit">
+              <span class="pay-icon">📋</span>
+              <label>Credit Terms</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Summary (repeated) -->
+      <div class="summary-card">
+        <div class="summary-title">Order Summary</div>
+        <div style="max-height:200px;overflow-y:auto;margin-bottom:16px" id="checkoutItemsList"></div>
+        <div class="summary-divider"></div>
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span id="co_subtotal">₹0.00</span>
+        </div>
+        <div class="summary-row">
+          <span>GST</span>
+          <span id="co_gst">₹0.00</span>
+        </div>
+        <div class="summary-divider"></div>
+        <div class="summary-total">
+          <span>Total</span>
+          <span id="co_total">₹0.00</span>
+        </div>
+        <button class="btn-place-order" id="placeOrderBtn" onclick="placeOrder()">
+          ✅ Place Order
+        </button>
+        <br/>
+        <button onclick="goBackToCart()" style="width:100%;margin-top:10px;background:transparent;border:1px solid var(--border);color:var(--muted);padding:11px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.875rem;cursor:pointer;transition:all 0.2s" onmouseover="this.style.borderColor='var(--teal)';this.style.color='var(--teal)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">
+          ← Edit Cart
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUCCESS STATE -->
+  <div class="success-state" id="successView">
+    <div class="success-icon">✅</div>
+    <h2>Order Placed Successfully!</h2>
+    <p>Your bulk order has been received. Our team will contact you within 24 hours to confirm dispatch details and payment.</p>
+    <div class="order-id-box" id="orderIdBox">Order #MW-000000</div>
+    <br/>
+    <div class="success-actions">
+      <a href="index.html" class="btn-shop">🏠 Back to Home</a>
+      <a href="catalog.html" class="btn-shop" style="background:var(--bg2);border:1px solid var(--border);color:var(--text)">Browse More</a>
+    </div>
+  </div>
+</div>
+
+<!-- ── SUPABASE ── -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://doduxjtqphzrthqbfaor.supabase.co';
+  const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRvZHV4anRxcGh6cnRocWJmYW9yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM5MTcyOTAsImV4cCI6MjA4OTQ5MzI5MH0.HRvDWoG4E-Gus2LmaCz0xwd-HkY72eUpn6jOTAG4yio';
+  const { createClient } = supabase;
+  const db = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  const catEmojis = {
+    'Tablets & Capsules':'💊','Injectables':'💉',
+    'Surgical Supplies':'🩺','OTC Products':'🧴',
+    'Medical Equipment':'🏥','Syrups & Liquids':'🧪'
+  };
+
+  let cart = [];
+
+  function getCart() { return JSON.parse(localStorage.getItem('mw_cart') || '[]'); }
+  function saveCart(c) { localStorage.setItem('mw_cart', JSON.stringify(c)); }
+
+  function showToast(msg, icon='✅') {
+    const t = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    document.getElementById('toastIcon').textContent = icon;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  function calcTotals(items) {
+    let subtotal = 0, gstTotal = 0;
+    items.forEach(item => {
+      const s = item.price_per_unit * item.quantity;
+      subtotal += s;
+      gstTotal += s * (item.gst_percent / 100);
+    });
+    return { subtotal, gstTotal, total: subtotal + gstTotal };
+  }
+
+  function renderCart() {
+    cart = getCart();
+    const wrap = document.getElementById('cartItemsWrap');
+
+    if (cart.length === 0) {
+      wrap.innerHTML = `
+        <div class="empty-cart">
+          <div class="icon">🛒</div>
+          <h3>Your cart is empty</h3>
+          <p>Add products from the catalog to get started</p>
+          <a href="catalog.html" class="btn-shop">Browse Catalog →</a>
+        </div>`;
+      document.getElementById('proceedBtn').disabled = true;
+      updateSummary([]);
+      return;
+    }
+
+    document.getElementById('proceedBtn').disabled = false;
+
+    wrap.innerHTML = '';
+    cart.forEach((item, i) => {
+      const icon = catEmojis[item.category] || '💊';
+      const lineTotal = item.price_per_unit * item.quantity;
+      const card = document.createElement('div');
+      card.className = 'cart-item';
+      card.style.animationDelay = `${i * 0.06}s`;
+      card.innerHTML = `
+        <div class="item-icon">${icon}</div>
+        <div class="item-details">
+          <div class="item-brand">${item.brand || 'Generic'}</div>
+          <div class="item-name">${item.name}</div>
+          <div class="item-meta">₹${item.price_per_unit.toFixed(2)}/unit · GST ${item.gst_percent}%</div>
+        </div>
+        <div class="item-controls">
+          <div class="item-price">
+            ₹${lineTotal.toFixed(2)}
+            <div class="item-price-sub">+ ₹${(lineTotal * item.gst_percent/100).toFixed(2)} GST</div>
+          </div>
+          <div class="item-qty-row">
+            <div class="qty-ctrl">
+              <button class="qty-btn" onclick="changeItemQty(${i}, -${item.moq})">−</button>
+              <input type="number" class="qty-num" value="${item.quantity}" min="${item.moq}"
+                onchange="setItemQty(${i}, this.value)"/>
+              <button class="qty-btn" onclick="changeItemQty(${i}, ${item.moq})">+</button>
+            </div>
+            <button class="btn-remove" onclick="removeItem(${i})" title="Remove">🗑</button>
+          </div>
+        </div>`;
+      wrap.appendChild(card);
+    });
+
+    updateSummary(cart);
+  }
+
+  function updateSummary(items) {
+    const { subtotal, gstTotal, total } = calcTotals(items);
+    const totalQty = items.reduce((s,i) => s + i.quantity, 0);
+    document.getElementById('summaryItems').textContent = items.length;
+    document.getElementById('summaryQty').textContent = totalQty + ' units';
+    document.getElementById('summarySubtotal').textContent = '₹' + subtotal.toFixed(2);
+    document.getElementById('summaryGst').textContent = '₹' + gstTotal.toFixed(2);
+    document.getElementById('summaryTotal').textContent = '₹' + total.toFixed(2);
+  }
+
+  function changeItemQty(index, delta) {
+    cart = getCart();
+    let newQty = cart[index].quantity + delta;
+    if (newQty < cart[index].moq) newQty = cart[index].moq;
+    cart[index].quantity = newQty;
+    saveCart(cart);
+    renderCart();
+  }
+
+  function setItemQty(index, val) {
+    cart = getCart();
+    let newQty = parseInt(val) || cart[index].moq;
+    if (newQty < cart[index].moq) newQty = cart[index].moq;
+    cart[index].quantity = newQty;
+    saveCart(cart);
+    renderCart();
+  }
+
+  function removeItem(index) {
+    cart = getCart();
+    const name = cart[index].name;
+    cart.splice(index, 1);
+    saveCart(cart);
+    renderCart();
+    showToast(`${name} removed`, '🗑');
+  }
+
+  function goToCheckout() {
+    cart = getCart();
+    if (cart.length === 0) return;
+
+    // Update steps
+    document.getElementById('step1').classList.remove('active');
+    document.getElementById('step1').classList.add('done');
+    document.getElementById('step1').querySelector('.step-num').textContent = '✓';
+    document.getElementById('step2').classList.add('active');
+
+    document.getElementById('cartView').style.display = 'none';
+    document.getElementById('checkoutView').style.display = 'block';
+
+    // Populate checkout summary
+    const { subtotal, gstTotal, total } = calcTotals(cart);
+    document.getElementById('co_subtotal').textContent = '₹' + subtotal.toFixed(2);
+    document.getElementById('co_gst').textContent = '₹' + gstTotal.toFixed(2);
+    document.getElementById('co_total').textContent = '₹' + total.toFixed(2);
+
+    const itemsList = document.getElementById('checkoutItemsList');
+    itemsList.innerHTML = cart.map(item => `
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:0.82rem">
+        <span style="color:var(--text)">${item.name} <span style="color:var(--muted)">×${item.quantity}</span></span>
+        <span style="color:var(--teal);font-weight:600">₹${(item.price_per_unit * item.quantity).toFixed(2)}</span>
+      </div>`).join('');
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function goBackToCart() {
+    document.getElementById('step1').classList.add('active');
+    document.getElementById('step1').classList.remove('done');
+    document.getElementById('step1').querySelector('.step-num').textContent = '1';
+    document.getElementById('step2').classList.remove('active');
+
+    document.getElementById('cartView').style.display = 'block';
+    document.getElementById('checkoutView').style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function selectPayment(el, val) {
+    document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    el.querySelector('input').checked = true;
+  }
+
+  function validateForm() {
+    const required = [
+      { id: 'firmName', label: 'Firm Name' },
+      { id: 'contactName', label: 'Contact Person' },
+      { id: 'phone', label: 'Phone Number' },
+      { id: 'email', label: 'Email' },
+      { id: 'drugLicense', label: 'Drug License Number' },
+      { id: 'street', label: 'Street Address' },
+      { id: 'city', label: 'City' },
+      { id: 'state', label: 'State' },
+      { id: 'pincode', label: 'PIN Code' },
+    ];
+
+    for (const f of required) {
+      const el = document.getElementById(f.id);
+      if (!el.value.trim()) {
+        el.focus();
+        el.style.borderColor = 'var(--red)';
+        setTimeout(() => el.style.borderColor = '', 2000);
+        showToast(`Please fill: ${f.label}`, '⚠️');
+        return false;
+      }
+    }
+
+    const phone = document.getElementById('phone').value.replace(/\s/g,'');
+    if (phone.length < 10) {
+      showToast('Enter a valid phone number', '⚠️');
+      return false;
+    }
+
+    const pin = document.getElementById('pincode').value;
+    if (!/^\d{6}$/.test(pin)) {
+      showToast('Enter a valid 6-digit PIN code', '⚠️');
+      return false;
+    }
+
+    return true;
+  }
+
+  async function placeOrder() {
+    if (!validateForm()) return;
+
+    cart = getCart();
+    if (cart.length === 0) return;
+
+    document.getElementById('loadingOverlay').classList.add('visible');
+    document.getElementById('placeOrderBtn').disabled = true;
+
+    const { subtotal, gstTotal, total } = calcTotals(cart);
+    const payment = document.querySelector('input[name="payment"]:checked')?.value || 'cod';
+
+    const buyerData = {
+      firm_name: document.getElementById('firmName').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      gst_number: document.getElementById('gstNumber').value.trim().toUpperCase() || null,
+      drug_license: document.getElementById('drugLicense').value.trim(),
+      phone: document.getElementById('phone').value.trim(),
+      address: [
+        document.getElementById('street').value,
+        document.getElementById('city').value,
+        document.getElementById('state').value,
+        document.getElementById('pincode').value,
+        document.getElementById('landmark').value
+      ].filter(Boolean).join(', ')
+    };
+
+    try {
+      // Upsert buyer
+      const { data: buyer, error: buyerErr } = await db
+        .from('buyers')
+        .upsert(buyerData, { onConflict: 'email' })
+        .select()
+        .single();
+
+      if (buyerErr) throw buyerErr;
+
+      // Create order
+      const { data: order, error: orderErr } = await db
+        .from('orders')
+        .insert({
+          buyer_id: buyer.id,
+          total_amount: total,
+          status: 'pending'
+        })
+        .select()
+        .single();
+
+      if (orderErr) throw orderErr;
+
+      // Insert order items
+      const items = cart.map(item => ({
+        order_id: order.id,
+        product_id: item.id,
+        quantity: item.quantity,
+        price_per_unit: item.price_per_unit
+      }));
+
+      const { error: itemsErr } = await db.from('order_items').insert(items);
+      if (itemsErr) throw itemsErr;
+
+      // Clear cart
+      localStorage.removeItem('mw_cart');
+
+      // Show success
+      document.getElementById('loadingOverlay').classList.remove('visible');
+      document.getElementById('checkoutView').style.display = 'none';
+
+      // Update steps
+      document.getElementById('step2').classList.remove('active');
+      document.getElementById('step2').classList.add('done');
+      document.getElementById('step2').querySelector('.step-num').textContent = '✓';
+      document.getElementById('step3').classList.add('done');
+      document.getElementById('step3').querySelector('.step-num').textContent = '✓';
+
+      // Generate order ID
+      const orderId = 'MW-' + order.id.slice(0,8).toUpperCase();
+      document.getElementById('orderIdBox').textContent = 'Order #' + orderId;
+
+      document.getElementById('successView').classList.add('visible');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    } catch (err) {
+      console.error(err);
+      document.getElementById('loadingOverlay').classList.remove('visible');
+      document.getElementById('placeOrderBtn').disabled = false;
+      showToast('Something went wrong. Please try again.', '❌');
+    }
+  }
+
+  // ── Init ──
+  renderCart();
+</script>
+
+</body>
+</html>
