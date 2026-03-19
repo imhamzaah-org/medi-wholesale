@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login — MediWholesale</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #080d14;
+      --bg2: #0d1520;
+      --bg3: #111d2e;
+      --teal: #00d4aa;
+      --teal2: #00a882;
+      --text: #e8f4f8;
+      --muted: #7a9bb5;
+      --border: rgba(0,212,170,0.12);
+      --red: #ef4444;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow-x: hidden;
+    }
+
+    /* ── LEFT PANEL ── */
+    .left-panel {
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 48px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .left-panel::before {
+      content: '';
+      position: absolute;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(0,212,170,0.08) 0%, transparent 70%);
+      bottom: -100px; right: -100px;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .left-panel::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,212,170,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,212,170,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+
+    .left-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.4rem;
+      color: var(--text);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .left-logo span { color: var(--teal); }
+
+    .logo-dot {
+      width: 8px; height: 8px;
+      background: var(--teal);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%,100%{opacity:1;transform:scale(1)}
+      50%{opacity:.5;transform:scale(1.3)}
+    }
+
+    .left-content {
+      position: relative;
+      z-index: 1;
+      margin-top: auto;
+      padding-top: 60px;
+    }
+
+    .left-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(0,212,170,0.08);
+      border: 1px solid rgba(0,212,170,0.2);
+      color: var(--teal);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 100px;
+      margin-bottom: 20px;
+    }
+
+    .left-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.6rem, 2.5vw, 2.4rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+
+    .left-title em { font-style: normal; color: var(--teal); }
+
+    .left-desc {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.7;
+      margin-bottom: 36px;
+      max-width: 380px;
+    }
+
+    .trust-items {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .trust-icon {
+      width: 32px; height: 32px;
+      background: rgba(0,212,170,0.08);
+      border: 1px solid rgba(0,212,170,0.15);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      flex-shrink: 0;
+    }
+
+    /* ── RIGHT PANEL ── */
+    .right-panel {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 40px;
+      background: var(--bg);
+    }
+
+    .auth-box {
+      width: 100%;
+      max-width: 420px;
+    }
+
+    /* ── TABS ── */
+    .auth-tabs {
+      display: flex;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 28px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      background: none;
+      border: none;
+      color: var(--muted);
+      padding: 10px;
+      border-radius: 7px;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: var(--teal);
+      color: #080d14;
+    }
+
+    /* ── FORM ── */
+    .auth-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .auth-sub {
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-bottom: 28px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      font-size: 0.775rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .form-label .req { color: var(--red); }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.95rem;
+      pointer-events: none;
+    }
+
+    .form-input {
+      width: 100%;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 14px 11px 38px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.875rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-input.no-icon { padding-left: 14px; }
+
+    .form-input:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(0,212,170,0.08);
+    }
+
+    .form-input.error { border-color: var(--red); }
+
+    .form-input::placeholder { color: var(--muted); }
+
+    .eye-btn {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 2px;
+      transition: color 0.2s;
+    }
+
+    .eye-btn:hover { color: var(--teal); }
+
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .form-hint {
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    .form-select {
+      width: 100%;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 14px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.875rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-select:focus { border-color: var(--teal); }
+    .form-select option { background: var(--bg2); }
+
+    /* ── DIVIDER ── */
+    .form-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 20px 0;
+    }
+
+    /* ── SUBMIT ── */
+    .btn-submit {
+      width: 100%;
+      background: var(--teal);
+      border: none;
+      color: #080d14;
+      padding: 14px;
+      border-radius: 10px;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .btn-submit:hover {
+      background: #00efc0;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 25px rgba(0,212,170,0.25);
+    }
+
+    .btn-submit:disabled {
+      background: var(--bg3);
+      color: var(--muted);
+      transform: none;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    .btn-spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(8,13,20,0.3);
+      border-top-color: #080d14;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── ERROR ALERT ── */
+    .alert {
+      border-radius: 8px;
+      padding: 11px 14px;
+      font-size: 0.825rem;
+      margin-bottom: 16px;
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .alert.error {
+      background: rgba(239,68,68,0.08);
+      border: 1px solid rgba(239,68,68,0.25);
+      color: #fca5a5;
+    }
+
+    .alert.success {
+      background: rgba(0,212,170,0.08);
+      border: 1px solid rgba(0,212,170,0.2);
+      color: var(--teal);
+    }
+
+    .alert.visible { display: flex; }
+
+    /* ── FORGOT ── */
+    .forgot-link {
+      text-align: right;
+      margin-top: -8px;
+      margin-bottom: 16px;
+    }
+
+    .forgot-link a {
+      color: var(--teal);
+      font-size: 0.8rem;
+      text-decoration: none;
+    }
+
+    .forgot-link a:hover { text-decoration: underline; }
+
+    /* ── TERMS ── */
+    .terms-check {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .terms-check input {
+      accent-color: var(--teal);
+      margin-top: 2px;
+      width: 15px; height: 15px;
+      flex-shrink: 0;
+    }
+
+    .terms-check a { color: var(--teal); text-decoration: none; }
+    .terms-check a:hover { text-decoration: underline; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 28px; right: 28px;
+      background: var(--bg2);
+      border: 1px solid var(--teal);
+      border-radius: 10px;
+      padding: 13px 18px;
+      font-size: 0.85rem;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      max-width: 300px;
+    }
+
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.err { border-color: var(--red); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      body { grid-template-columns: 1fr; }
+      .left-panel { display: none; }
+      .right-panel { padding: 32px 20px; align-items: flex-start; padding-top: 60px; }
+      .form-grid-2 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── LEFT PANEL ── -->
+<div class="left-panel">
+  <a href="index.html" class="left-logo">
+    <div class="logo-dot"></div>
+    Medi<span>Wholesale</span>
+  </a>
+
+  <div class="left-content">
+    <div class="left-badge">🏥 B2B Medical Platform</div>
+    <h2 class="left-title">India's Most Trusted<br/><em>Medical Wholesale</em><br/>Partner</h2>
+    <p class="left-desc">Join 850+ pharmacies, clinics, and hospitals getting bulk pricing, GST invoices, and pan-India delivery.</p>
+    <div class="trust-items">
+      <div class="trust-item">
+        <div class="trust-icon">📦</div>
+        <span>Bulk slab pricing — more you order, less you pay</span>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">🧾</div>
+        <span>Automatic GST invoicing on every order</span>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">🚚</div>
+        <span>Pan-India delivery within 48 hours</span>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">✅</div>
+        <span>Only verified businesses with drug license</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── RIGHT PANEL ── -->
+<div class="right-panel">
+  <div class="auth-box">
+
+    <!-- Mobile Logo -->
+    <a href="index.html" class="left-logo" style="margin-bottom:28px;display:none" id="mobileLogo">
+      <div class="logo-dot"></div>
+      Medi<span>Wholesale</span>
+    </a>
+
+    <!-- Tabs -->
+    <div class="auth-tabs">
+      <button class="tab-btn active" id="loginTab" onclick="switchTab('login')">Login</button>
+      <button class="tab-btn" id="registerTab" onclick="switchTab('register')">Register Business</button>
+    </div>
+
+    <!-- Alert -->
+    <div class="alert" id="alertBox">
+      <span id="alertIcon">⚠️</span>
+      <span id="alertMsg"></span>
+    </div>
+
+    <!-- ── LOGIN FORM ── -->
+    <div id="loginForm">
+      <h2 class="auth-title">Welcome back</h2>
+      <p class="auth-sub">Login to your business account</p>
+
+      <div class="form-group">
+        <label class="form-label">Email Address <span class="req">*</span></label>
+        <div class="input-wrap">
+          <span class="input-icon">📧</span>
+          <input type="email" class="form-input" id="loginEmail" placeholder="business@email.com"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password <span class="req">*</span></label>
+        <div class="input-wrap">
+          <span class="input-icon">🔒</span>
+          <input type="password" class="form-input" id="loginPassword" placeholder="Enter your password"/>
+          <button class="eye-btn" onclick="togglePass('loginPassword', this)">👁</button>
+        </div>
+      </div>
+
+      <div class="forgot-link">
+        <a href="#" onclick="forgotPassword()">Forgot password?</a>
+      </div>
+
+      <button class="btn-submit" id="loginBtn" onclick="handleLogin()">
+        <div class="btn-spinner" id="loginSpinner"></div>
+        <span id="loginBtnText">Login →</span>
+      </button>
+
+      <div style="text-align:center;margin-top:20px;font-size:0.825rem;color:var(--muted)">
+        Don't have an account?
+        <a href="#" onclick="switchTab('register')" style="color:var(--teal);text-decoration:none;font-weight:600">Register your business</a>
+      </div>
+
+      <div class="form-divider"></div>
+
+      <div style="text-align:center">
+        <a href="admin.html" style="color:var(--muted);font-size:0.8rem;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:color 0.2s" onmouseover="this.style.color='var(--teal)'" onmouseout="this.style.color='var(--muted)'">
+          🔧 Admin Panel
+        </a>
+      </div>
+    </div>
+
+    <!-- ── REGISTER FORM ── -->
+    <div id="registerForm" style="display:none">
+      <h2 class="auth-title">Register Business</h2>
+      <p class="auth-sub">Create your wholesale buyer account</p>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label">Firm / Business Name <span class="req">*</span></label>
+          <div class="input-wrap">
+            <span class="input-icon">🏢</span>
+            <input type="text" class="form-input" id="regFirm" placeholder="Sharma Medicals"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Contact Person <span class="req">*</span></label>
+          <div class="input-wrap">
+            <span class="input-icon">👤</span>
+            <input type="text" class="form-input" id="regName" placeholder="Full name"/>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Email Address <span class="req">*</span></label>
+        <div class="input-wrap">
+          <span class="input-icon">📧</span>
+          <input type="email" class="form-input" id="regEmail" placeholder="business@email.com"/>
+        </div>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label">Phone <span class="req">*</span></label>
+          <div class="input-wrap">
+            <span class="input-icon">📱</span>
+            <input type="tel" class="form-input" id="regPhone" placeholder="+91 XXXXX XXXXX" maxlength="13"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Business Type</label>
+          <select class="form-select" id="regType">
+            <option value="">Select type</option>
+            <option>Pharmacy / Medical Store</option>
+            <option>Clinic / Hospital</option>
+            <option>Distributor</option>
+            <option>Nursing Home</option>
+            <option>Diagnostic Lab</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label">Drug License No. <span class="req">*</span></label>
+          <div class="input-wrap">
+            <span class="input-icon">📋</span>
+            <input type="text" class="form-input" id="regLicense" placeholder="DL/2020/UP/12345"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">GST Number</label>
+          <div class="input-wrap">
+            <span class="input-icon">🧾</span>
+            <input type="text" class="form-input" id="regGst" placeholder="07AAAAA0000A1Z5" maxlength="15" style="text-transform:uppercase"/>
+          </div>
+          <span class="form-hint">Optional if not registered</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Full Address <span class="req">*</span></label>
+        <div class="input-wrap">
+          <span class="input-icon">📍</span>
+          <input type="text" class="form-input" id="regAddress" placeholder="Shop no., street, city, state, PIN"/>
+        </div>
+      </div>
+
+      <div class="form-divider"></div>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label">Password <span class="req">*</span></label>
+          <div class="input-wrap">
+            <span class="input-icon">🔒</span>
+            <input type="password" class="form-input" id="regPassword" placeholder="Min 8 characters"/>
+            <button class="eye-btn" onclick="togglePass('regPassword', this)">👁</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Confirm Password <span class="req">*</span></label>
+          <div class="input-wrap">
+            <span class="input-icon">🔒</span>
+            <input type="password" class="form-input" id="regConfirm" placeholder="Re-enter password"/>
+            <button class="eye-btn" onclick="togglePass('regConfirm', this)">👁</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="terms-check">
+        <input type="checkbox" id="termsCheck"/>
+        <label for="termsCheck">
+          I agree to the <a href="#">Terms & Conditions</a> and confirm that my business has a valid drug license for wholesale purchase.
+        </label>
+      </div>
+
+      <button class="btn-submit" id="registerBtn" onclick="handleRegister()">
+        <div class="btn-spinner" id="registerSpinner"></div>
+        <span id="registerBtnText">Create Account →</span>
+      </button>
+
+      <div style="text-align:center;margin-top:20px;font-size:0.825rem;color:var(--muted)">
+        Already have an account?
+        <a href="#" onclick="switchTab('login')" style="color:var(--teal);text-decoration:none;font-weight:600">Login here</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span id="toastIcon">✅</span>
+  <span id="toastMsg"></span>
+</div>
+
+<!-- ── SUPABASE ── -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://doduxjtqphzrthqbfaor.supabase.co';
+  const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRvZHV4anRxcGh6cnRocWJmYW9yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM5MTcyOTAsImV4cCI6MjA4OTQ5MzI5MH0.HRvDWoG4E-Gus2LmaCz0xwd-HkY72eUpn6jOTAG4yio';
+  const { createClient } = supabase;
+  const db = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  // ── Mobile logo show ──
+  if (window.innerWidth <= 768) {
+    document.getElementById('mobileLogo').style.display = 'flex';
+  }
+
+  // ── Tab switch ──
+  function switchTab(tab) {
+    const isLogin = tab === 'login';
+    document.getElementById('loginTab').classList.toggle('active', isLogin);
+    document.getElementById('registerTab').classList.toggle('active', !isLogin);
+    document.getElementById('loginForm').style.display = isLogin ? 'block' : 'none';
+    document.getElementById('registerForm').style.display = isLogin ? 'none' : 'block';
+    hideAlert();
+  }
+
+  // ── Toggle password visibility ──
+  function togglePass(id, btn) {
+    const input = document.getElementById(id);
+    const isPass = input.type === 'password';
+    input.type = isPass ? 'text' : 'password';
+    btn.textContent = isPass ? '🙈' : '👁';
+  }
+
+  // ── Alert ──
+  function showAlert(msg, type = 'error') {
+    const box = document.getElementById('alertBox');
+    document.getElementById('alertMsg').textContent = msg;
+    document.getElementById('alertIcon').textContent = type === 'error' ? '⚠️' : '✅';
+    box.className = `alert ${type} visible`;
+  }
+
+  function hideAlert() {
+    document.getElementById('alertBox').className = 'alert';
+  }
+
+  // ── Toast ──
+  function showToast(msg, icon = '✅', isErr = false) {
+    const t = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    document.getElementById('toastIcon').textContent = icon;
+    t.className = `toast show${isErr ? ' err' : ''}`;
+    setTimeout(() => t.className = 'toast', 3500);
+  }
+
+  // ── Loading state ──
+  function setLoading(btnId, spinnerId, textId, loading, text) {
+    const btn = document.getElementById(btnId);
+    const spinner = document.getElementById(spinnerId);
+    const textEl = document.getElementById(textId);
+    btn.disabled = loading;
+    spinner.style.display = loading ? 'block' : 'none';
+    textEl.textContent = loading ? 'Please wait...' : text;
+  }
+
+  // ── LOGIN ──
+  async function handleLogin() {
+    hideAlert();
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+
+    if (!email || !password) {
+      showAlert('Please fill in all fields');
+      return;
+    }
+
+    setLoading('loginBtn', 'loginSpinner', 'loginBtnText', true, 'Login →');
+
+    const { data, error } = await db.auth.signInWithPassword({ email, password });
+
+    setLoading('loginBtn', 'loginSpinner', 'loginBtnText', false, 'Login →');
+
+    if (error) {
+      showAlert(error.message === 'Invalid login credentials'
+        ? 'Invalid email or password. Please try again.'
+        : error.message);
+      return;
+    }
+
+    // Check if admin
+    const { data: profile } = await db
+      .from('buyers')
+      .select('firm_name')
+      .eq('email', email)
+      .single();
+
+    showToast(`Welcome back, ${profile?.firm_name || 'User'}!`);
+    setTimeout(() => {
+      // Redirect based on role
+      const redirect = new URLSearchParams(window.location.search).get('redirect') || 'index.html';
+      window.location.href = redirect;
+    }, 1200);
+  }
+
+  // ── REGISTER ──
+  async function handleRegister() {
+    hideAlert();
+
+    const firm = document.getElementById('regFirm').value.trim();
+    const name = document.getElementById('regName').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const phone = document.getElementById('regPhone').value.trim();
+    const license = document.getElementById('regLicense').value.trim();
+    const gst = document.getElementById('regGst').value.trim().toUpperCase();
+    const address = document.getElementById('regAddress').value.trim();
+    const password = document.getElementById('regPassword').value;
+    const confirm = document.getElementById('regConfirm').value;
+    const terms = document.getElementById('termsCheck').checked;
+
+    // Validation
+    if (!firm || !name || !email || !phone || !license || !address || !password || !confirm) {
+      showAlert('Please fill in all required fields');
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showAlert('Please enter a valid email address');
+      return;
+    }
+
+    if (password.length < 8) {
+      showAlert('Password must be at least 8 characters');
+      return;
+    }
+
+    if (password !== confirm) {
+      showAlert('Passwords do not match');
+      return;
+    }
+
+    if (!terms) {
+      showAlert('Please accept the Terms & Conditions');
+      return;
+    }
+
+    setLoading('registerBtn', 'registerSpinner', 'registerBtnText', true, 'Create Account →');
+
+    // Sign up with Supabase Auth
+    const { data: authData, error: authError } = await db.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { firm_name: firm, contact_name: name }
+      }
+    });
+
+    if (authError) {
+      setLoading('registerBtn', 'registerSpinner', 'registerBtnText', false, 'Create Account →');
+      showAlert(authError.message);
+      return;
+    }
+
+    // Insert into buyers table
+    const { error: buyerError } = await db.from('buyers').upsert({
+      email,
+      firm_name: firm,
+      gst_number: gst || null,
+      drug_license: license,
+      phone,
+      address
+    }, { onConflict: 'email' });
+
+    setLoading('registerBtn', 'registerSpinner', 'registerBtnText', false, 'Create Account →');
+
+    if (buyerError) {
+      showAlert('Registration failed. Please try again.');
+      return;
+    }
+
+    showAlert('Account created! Please check your email to verify your account.', 'success');
+    showToast('Registration successful! Check your email.', '✅');
+
+    // Switch to login after 2s
+    setTimeout(() => {
+      document.getElementById('loginEmail').value = email;
+      switchTab('login');
+    }, 2500);
+  }
+
+  // ── FORGOT PASSWORD ──
+  async function forgotPassword() {
+    const email = document.getElementById('loginEmail').value.trim();
+    if (!email) {
+      showAlert('Enter your email address first');
+      return;
+    }
+
+    const { error } = await db.auth.resetPasswordForEmail(email);
+    if (error) {
+      showAlert(error.message);
+    } else {
+      showAlert('Password reset email sent! Check your inbox.', 'success');
+    }
+  }
+
+  // ── Check if already logged in ──
+  async function checkSession() {
+    const { data: { session } } = await db.auth.getSession();
+    if (session) {
+      const redirect = new URLSearchParams(window.location.search).get('redirect') || 'index.html';
+      window.location.href = redirect;
+    }
+  }
+
+  // ── Enter key submit ──
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const loginVisible = document.getElementById('loginForm').style.display !== 'none';
+      if (loginVisible) handleLogin();
+      else handleRegister();
+    }
+  });
+
+  checkSession();
+</script>
+
+</body>
+</html>
